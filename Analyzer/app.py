@@ -16,6 +16,7 @@ from sklearn.manifold import MDS
 
 DIRPATH = 'C:/Programmierung/Masterarbeit/Scraper/data/articles/'
 RESULTPATH = 'C:/Programmierung/Masterarbeit/Analyzer/results/'
+
 SPONPATH = os.path.join(DIRPATH, 'SPON')
 ZEITPATH = os.path.join(DIRPATH, 'ZEIT')
 
