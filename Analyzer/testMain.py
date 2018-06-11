@@ -7,10 +7,10 @@ Created on Fri Jun  8 18:13:28 2018
 
 import log
 import os.path
-import importlib
-from lib import Tokenizer
+from lib import Tokenizer, Normalizer, Tagger
 
-importlib.reload
+
+
 
 # logger
 datapath = os.path.abspath(os.path.dirname(__file__)) + '\\data\\'
@@ -19,4 +19,6 @@ logger.info('start analyzing')
 
 TESTPATH = 'C:/Programmierung/Masterarbeit/Scraper/data/articles/TEST/'
 tokens = Tokenizer.tokenize(TESTPATH)
+tokens = Normalizer.normalize(tokens)
+Tagger.tag(tokens)
 
