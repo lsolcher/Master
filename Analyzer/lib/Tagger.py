@@ -2,8 +2,7 @@ import os
 import nltk
 import random
 import pickle
-import ClassifierBasedGermanTagger
-
+from ClassifierBasedGermanTagger import ClassifierBasedGermanTagger
 
 
 def tag(tokens):
@@ -11,6 +10,15 @@ def tag(tokens):
 
     with open(tagger, 'rb') as f:
         ger_tagger = pickle.load(f)
-    #for t in tokens:
-    ger_tagger.tag(['Der', 'kleine', 'gelbe', 'Hund', '.'])
+    tagged_tokens = []
+    for t in tokens:
+        tagged_tokens.append(ger_tagger.tag(t))
+    return tagged_tokens
 
+
+def do_tag(tokens, tagger):
+    tagged_tokens = []
+    for t in tokens:
+        tagged_tokens.append(tagger.tag(t))
+
+    return tagged_tokens

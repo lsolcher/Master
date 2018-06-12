@@ -28,7 +28,7 @@ def tokenize(dirpath):
         
     #resultfile = open(os.path.join(RESULTPATH, 'result.txt'), 'w')
     #for item in tokens[1]:
-     # resultfile.write("%s\n" % item)
+    # resultfile.write("%s\n" % item)
      
     return tokens;
         
