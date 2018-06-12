@@ -2,5 +2,8 @@
 *.txt
 *.csv
 *.pyc
+*.csv
+*.xml
+*.iml
 
 !*/todos.txt
