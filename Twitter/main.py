@@ -2,6 +2,7 @@ from tweepy import Stream
 from tweepy import OAuthHandler
 from tweepy.streaming import StreamListener
 from tweepy import API
+import json
 
 ckey = 'rGxOFKgKRoGo1Kpl1FEqjNGlI'
 csecret = 'nnk4mqbRdOQQsCy8rIwCAxHnFUO6iGgjkpSsM96bGSZcANg7mR'
@@ -12,7 +13,9 @@ asecret = 'Vy5hWwthlxuU6qSVoq91Bb4TjfJo9sHSrmx66BN04zoTX'
 class Listener(StreamListener):
 
     def on_data(self, data):
-        print(data)
+        data_refined = json.loads(data)
+        if 'http' in data_refined['text']:
+            print(data)
         return True
 
     def on_error(self, status_code):
@@ -25,13 +28,13 @@ auth.set_access_token(atoken, asecret)
 api = API(auth)
 
 twitterStream = Stream(auth, Listener())
-twitterStream.filter(track=["AFD"])
+twitterStream.filter(track=["Flüchtlinge"])
 
 
-test = api.lookup_users(user_ids=['17006157','59145948','157009365'])
-for user in test:
-    print (user.screen_name)
-    print (user.name)
+#test = api.lookup_users(user_ids=['17006157','59145948','157009365'])
+#for user in test:
+    #print (user.screen_name)
+    #print (user.name)
     #print user.description
     #print user.followers_count
     #print user.statuses_count
