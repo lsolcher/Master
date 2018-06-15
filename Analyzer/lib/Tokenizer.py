@@ -13,13 +13,12 @@ def tokenize(dirpath):
     
     logger = logging.getLogger('root')
     logger.info('start tokenization')
-    TESTPATH = 'C:/Programmierung/Masterarbeit/Scraper/data/articles/TEST/'   
-    
+
     files = []
     tokens = []
     for file in os.listdir(dirpath):
         if file.endswith(".txt"):
-            files.append(open(os.path.join(TESTPATH, file), encoding="utf8", errors='ignore').read());
+            files.append(open(os.path.join(dirpath, file), encoding="utf8", errors='ignore').read())
     
     for idx, file in enumerate(files):
         tokens.append(nltk.word_tokenize(file, language='german'))

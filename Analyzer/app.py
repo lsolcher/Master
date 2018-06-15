@@ -1,166 +1,102 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon May 28 19:44:00 2018
+Created on Fri Jun  8 18:13:28 2018
 
 @author: Luc
 """
 
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.metrics.pairwise import euclidean_distances
-import os
+import log
+from os import listdir
+import os.path
 from os.path import isfile, join
+from lib import Tokenizer, Normalizer, Tagger, Lemmatizer
+from collections import Counter
 import numpy as np
-import scipy
-import matplotlib.pyplot as plt
-from sklearn.manifold import MDS
-
-DIRPATH = 'C:/Programmierung/Masterarbeit/Scraper/data/articles/'
-RESULTPATH = 'C:/Programmierung/Masterarbeit/Analyzer/results/'
-
-SPONPATH = os.path.join(DIRPATH, 'SPON')
-ZEITPATH = os.path.join(DIRPATH, 'ZEIT')
-
-sponFiles = []
-for file in os.listdir(SPONPATH):
-    if file.endswith(".txt"):
-        sponFiles.append(open(os.path.join(SPONPATH, file), encoding="utf8", errors='ignore').read())
-zeitFiles = []
-for file in os.listdir(ZEITPATH):
-    if file.endswith(".txt"):
-        zeitFiles.append(open(os.path.join(ZEITPATH, file), encoding="utf8", errors='ignore').read())
-
-
-#files = [open(SPONDIRPATH + 'SPON_0.txt', 'r'), open(SPONDIRPATH + 'SPON_1.txt', 'r'), open(SPONDIRPATH + 'testfile.txt', 'r')]
-files = sponFiles + zeitFiles
-print(len(sponFiles))
-print(len(zeitFiles))
-print(len(files))
+import gensim
+import math
+import operator
+import time
 
 
 
-vectorizer = CountVectorizer(input='files')
-dtm = vectorizer.fit_transform(files)
-vocab = vectorizer.get_feature_names()
-scipy.sparse.csr.csr_matrix
-dtm = dtm.toarray()
-vocab = np.array(vocab)
-n, _ = dtm.shape
-dist = np.zeros((n, n))
-for i in range(n):
-    for j in range(n):
-        x, y = dtm[i, :], dtm[j, :]
-        dist[i, j] = np.sqrt(np.sum((x - y)**2))
-dist = euclidean_distances(dtm)
-#resultfile = open(os.path.join(RESULTPATH, 'result.csv'), 'wb')
-#resultfile.write(dtm)
-print(dtm)
-np.round(dist, 1)
-print(dist[0, 2])
-min_dist = 1000
-for i in range(438):
-    for j in range(48):
-        print(i)
-        print(j)
-        thisDist = dist[i, 438 + j]
-        print(thisDist)
-        if min_dist > thisDist:
-            print('new min dist:')
-            print(min_dist)
-            min_dist = thisDist
-            sponA = i
-            zeitA = j
-print(sponA)
-print(zeitA)
-print()
+def counter_cosine_similarity(c1, c2):
+    terms = set(c1).union(c2)
+    dotprod = sum(c1.get(k, 0) * c2.get(k, 0) for k in terms)
+    magA = math.sqrt(sum(c1.get(k, 0)**2 for k in terms))
+    magB = math.sqrt(sum(c2.get(k, 0)**2 for k in terms))
+    return dotprod / (magA * magB)
 
+# logger
+datapath = os.path.abspath(os.path.dirname(__file__)) + '\\data\\'
+logger = log.setup_custom_logger('root')
+logger.info('start analyzing')
 
-# Visualization
-"""
-mds = MDS(n_components=2, dissimilarity="precomputed", random_state=1)
-pos = mds.fit_transform(dist)
-xs, ys = pos[:, 0], pos[:, 1]
-names = [os.path.basename(fn).replace('.txt', '') for fn in files]
-print('show plot')
-for x, y, name in zip(xs, ys, names):
-    color = 'orange' if "Austen" in name else 'skyblue'
-    plt.scatter(x, y, c=color)
-    plt.text(x, y, name)
-plt.show()
-"""
-#scipy.spatial.distance.pdist(dist)
-#print(scipy.spatial.distance.pdist(dist))
+main_path = 'C:/Programmierung/Masterarbeit/Scraper/data/articles/'
+directory_list = list()
+for root, dirs, files in os.walk(main_path, topdown=False):
+    for name in dirs:
+        directory_list.append(os.path.join(root, name))
+tokens = []
+start = time.time()
+print('tokenizing...')
+for item in directory_list:
+    tokens.append(Tokenizer.tokenize(item))
+end = time.time()
+print('done! took ' + end-start + ' seconds.')
+start = time.time()
+print('tagging...')
+tokens = Tagger.tag(tokens)
+end = time.time()
+print('done! took ' + end-start + ' seconds.')
+start = time.time()
+print('normalizing...')
+tokens = Normalizer.normalize(tokens)
+end = time.time()
+print('done! took ' + end-start + ' seconds.')
+start = time.time()
+print('lemmatizing...')
+tokens = Lemmatizer.lemmatize(tokens)
+end = time.time()
+print('done! took ' + end-start + ' seconds.')
+start = time.time()
+word_list = []
+for token in tokens:
+    word_list.append([t[0] for t in token])
+counts = []
+print('counting...')
+for l in word_list:
+    counts.append(Counter(l))
+end = time.time()
+print('done! took ' + end-start + ' seconds.')
+start = time.time()
+vocab = []
+for l in word_list:
+    vocab.append(set())
 
+for i, c in enumerate(counts):
+    vocab[i] |= set(c.keys())
 
-"""
-vectorizerSpon = CountVectorizer(input='sponFiles')
-dtmSpon = vectorizerSpon.fit_transform(sponFiles)
-vocab = vectorizerSpon.get_feature_names()
-scipy.sparse.csr.csr_matrix
-dtmSpon = dtmSpon.toarray()
-vocab = np.array(vocab)
-n, _ = dtmSpon.shape
-distSpon = np.zeros((n, n))
-for i in range(n):
-    for j in range(n):
-        x, y = dtmSpon[i, :], dtmSpon[j, :]
-        distSpon[i, j] = np.sqrt(np.sum((x - y)**2))
-np.round(distSpon, 1)
+for v in vocab:
+    v = sorted(list(v))  # sorting here only for better display later
+    print(v)   # => becomes columns of BoW matrix
 
-        
-vectorizerZeit = CountVectorizer(input='zeitFiles')
-dtmZeit = vectorizerZeit.fit_transform(zeitFiles)
-vocab = vectorizerZeit.get_feature_names()
-scipy.sparse.csr.csr_matrix
-dtmZeit = dtmZeit.toarray()
-vocab = np.array(vocab)
-n, _ = dtmZeit.shape
-dist = np.zeros((n, n))
-for i in range(n):
-    for j in range(n):
-        x, y = dtmZeit[i, :], dtmZeit[j, :]
-        dist[i, j] = np.sqrt(np.sum((x - y)**2))
-distZeit = euclidean_distances(dtmZeit)
+bow = []
+for i, counter in enumerate(counts):
+    bow_row = [counter.get(term, 0) for term in vocab[i]]
+    bow.append(bow_row)
 
+print('calculating similarities...')
+similarities = {}
+for i, c in enumerate(counts):
+    for j, c1 in enumerate(counts):
+        if i != j:
+            similarities[i+':'+j] = counter_cosine_similarity(counts[i], counts[j])
 
-#resultfile = open(os.path.join(RESULTPATH, 'result.csv'), 'wb')
-#resultfile.write(dtm)
-#print(dtm)
-print(dist[0, 2])
-"""
+sorted_sims = sorted(similarities.items(), key=operator.itemgetter(0), reverse=True)
+end = time.time()
+print('done! took ' + end-start + ' seconds.')
 
-"""
-file = open(SPONDIRPATH + 'SPON_0.txt', 'r') 
-text = file.read().split(',')
-
-# create the transform
-vectorizer = CountVectorizer()
-# tokenize and build vocab
-vectorizer.fit(text)
-dtm = vectorizer.fit_transform(text)
-vocab = vectorizer.get_feature_names()
-print(dtm)
-print(vocab)
-dtm = dtm.toarray()
-vocab = np.array(vocab)
-"""
-"""
-# summarize
-print(vectorizer.vocabulary_)
-# encode document
-vector = vectorizer.transform(text)
-# summarize encoded vector
-print(vector.shape)
-print(type(vector))
-print(vector.toarray())
+print(sorted_sims)
 
 
 
-
-result = open('C:/Programmierung/Masterarbeit/Analyzer/results/result_0.txt', 'w')
-pickle.dump(vectorizer.get_feature_names(), result)
-
-#result.write(vectorizer.vocabulary_)
-#result.write(vector.shape)
-#result.write(type(vector))
-#result.write(vector.toarray()
-"""
