@@ -5,6 +5,8 @@
       <sourceFolder url="file://$MODULE_DIR$/lib/Classifier" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/lib/germalemma" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/lib/germalemma/data" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/rnn/venv" />
+      <excludeFolder url="file://$MODULE_DIR$/rnn/venv" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

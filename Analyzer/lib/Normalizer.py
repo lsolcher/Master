@@ -10,9 +10,9 @@ import nltk
 def normalize(tokens):
     
     print(len(tokens))
-    new_tokens = []
+    new_tokens = {}
 
-    for t in tokens:
+    for idx, t in tokens.items():
         print(len(t))
         t = remove_special_chars(t)
         print(len(t))
@@ -21,7 +21,7 @@ def normalize(tokens):
         #t = stem(t)
         #print(len(t))
         # correct spelling
-        new_tokens.append(t)
+        new_tokens[idx] = t
 
     print("done")
     return new_tokens

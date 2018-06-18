@@ -10,9 +10,10 @@ def tag(tokens):
 
     with open(tagger, 'rb') as f:
         ger_tagger = pickle.load(f)
-    tagged_tokens = []
-    for t in tokens:
-        tagged_tokens.append(ger_tagger.tag(t))
+    tagged_tokens = {}
+    for idx, t in tokens.items():
+        tagged_tokens[idx] = ger_tagger.tag(t)
+        print("tagged ", idx)
     return tagged_tokens
 
 
