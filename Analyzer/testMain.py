@@ -11,8 +11,6 @@ import os.path
 from os.path import isfile, join
 from lib import Tokenizer, Normalizer, Tagger, Lemmatizer
 from collections import Counter
-import numpy as np
-import gensim
 import math
 
 

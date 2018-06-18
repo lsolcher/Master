@@ -6,21 +6,25 @@ Created on Fri Jun  8 18:13:28 2018
 """
 
 import log
-from os import listdir
 import os.path
-from os.path import isfile, join
-from lib import Tokenizer, Normalizer, Tagger, Lemmatizer
+import rnn
 from collections import Counter
-import numpy as np
-import gensim
 import math
 import operator
 import time
 import re
 import csv
+import preprocessor
 
 
-def bow(preprocessed_tokens):
+def bow(main_path):
+    directory_list = list()
+    for root, dirs, files in os.walk(main_path, topdown=False):
+        for name in dirs:
+            directory_list.append(os.path.join(root, name))
+    preprocessed_tokens = preprocessor.preprocess_tokens(directory_list)
+
+    #BOW
     start = time.time()
     word_list = {}
     for idx, token in preprocessed_tokens.items():
@@ -67,35 +71,6 @@ def bow(preprocessed_tokens):
         w.writerows(sorted_sims)
 
 
-def preprocess_tokens(dir):
-    tokens = {}
-    paths = []
-    start = time.time()
-    print('tokenizing...')
-    for item in dir:
-        paths.append(item)
-    tokens = Tokenizer.tokenize(paths)
-    end = time.time()
-    print('done! took ', end - start, ' seconds.')
-    start = time.time()
-
-    print('tagging...')
-    tokens = Tagger.tag(tokens)
-    end = time.time()
-    print('done! took ', end - start, ' seconds.')
-    start = time.time()
-    print('normalizing...')
-    tokens = Normalizer.normalize(tokens)
-    end = time.time()
-    print('done! took ', end - start, ' seconds.')
-    start = time.time()
-    print('lemmatizing...')
-    tokens = Lemmatizer.lemmatize(tokens)
-    end = time.time()
-    print('done! took ', end - start, ' seconds.')
-    return tokens
-
-
 def counter_cosine_similarity(c1, c2):
     terms = set(c1).union(c2)
     dotprod = sum(c1.get(k, 0) * c2.get(k, 0) for k in terms)
@@ -109,16 +84,9 @@ def main():
     datapath = os.path.abspath(os.path.dirname(__file__)) + '\\data\\'
     logger = log.setup_custom_logger('root')
     logger.info('start analyzing')
-
     main_path = 'C:/Programmierung/Masterarbeit/Scraper/data/articles/'
-    directory_list = list()
-    for root, dirs, files in os.walk(main_path, topdown=False):
-        for name in dirs:
-            directory_list.append(os.path.join(root, name))
-    the_tokens = preprocess_tokens(directory_list)
-
-    #BOW
-    bow(the_tokens)
+    #rnn.rnn(main_path)
+    bow(main_path)
 
 
 if __name__ == "__main__":
