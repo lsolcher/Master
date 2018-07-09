@@ -3,10 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="49d06aea-359c-400b-a274-9b301769df65" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/obj/X_test.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/data/obj/X_test.pkl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/obj/X_train.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/data/obj/X_train.pkl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/RNN/create_word_vector.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/RNN/create_word_vector.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/RNN/rnn_keras.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/RNN/rnn_keras.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/germalemma" beforeDir="false" afterPath="$PROJECT_DIR$/lib/germalemma" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/germalemma/germalemma.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/germalemma/germalemma.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Scraper" beforeDir="false" afterPath="$PROJECT_DIR$/../Scraper" afterDir="false" />
@@ -89,11 +85,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="create_word_vector.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="create_word_vector.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/lib/RNN/create_word_vector.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="175">
-              <caret line="210" column="72" lean-forward="true" selection-start-line="210" selection-start-column="72" selection-end-line="210" selection-end-column="72" />
+            <state relative-caret-position="209">
+              <caret line="212" column="36" selection-start-line="212" selection-start-column="36" selection-end-line="212" selection-end-column="36" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
               </folding>
@@ -101,11 +97,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="rnn_keras.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="rnn_keras.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/RNN/rnn_keras.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="277">
-              <caret line="66" column="43" selection-start-line="66" selection-start-column="43" selection-end-line="66" selection-end-column="43" />
+            <state relative-caret-position="133">
+              <caret line="78" column="15" selection-start-line="78" selection-start-column="15" selection-end-line="78" selection-end-column="15" />
               <folding>
                 <element signature="e#0#48#0" expanded="true" />
               </folding>
@@ -153,7 +149,7 @@
       <find>forwa</find>
       <find>model_f</find>
       <find>loss</find>
-      <find />
+      <find>inputs =</find>
       <find>id_to_char</find>
       <find>sample</find>
       <find>pooled</find>
@@ -171,8 +167,8 @@
       <find>num_class</find>
       <find>key</find>
       <find>nlp</find>
-      <find>loss_sk</find>
       <find>test</find>
+      <find>loss_sk</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -429,15 +425,15 @@
       <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.32897604" />
       <window_info anchor="bottom" id="Python Console" order="10" sideWeight="0.49282786" weight="0.3278328" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.8135246" visible="true" weight="0.31683168" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.8135246" weight="0.31683168" />
       <window_info anchor="bottom" id="Terminal" order="11" weight="0.32893288" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25074628" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25074628" />
       <window_info anchor="bottom" id="Docker" order="12" show_stripe_button="false" />
       <window_info anchor="right" id="Database" order="3" />
       <window_info anchor="right" id="SciView" order="3" weight="0.7242888" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Debug" order="5" sideWeight="0.8360656" weight="0.47524753" />
+      <window_info anchor="bottom" id="Debug" order="5" sideWeight="0.8360656" visible="true" weight="0.47524753" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="4" weight="0.4" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -543,6 +539,11 @@
           <line>11</line>
           <option name="timeStamp" value="379" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/lib/RNN/rnn_keras.py</url>
+          <line>112</line>
+          <option name="timeStamp" value="380" />
+        </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
@@ -551,7 +552,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="380" />
+      <option name="time" value="381" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
@@ -940,22 +941,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/RNN/create_word_vector.py">
+    <entry file="file://$PROJECT_DIR$/lib/RNN/rnn_keras.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="175">
-          <caret line="210" column="72" lean-forward="true" selection-start-line="210" selection-start-column="72" selection-end-line="210" selection-end-column="72" />
+        <state relative-caret-position="133">
+          <caret line="78" column="15" selection-start-line="78" selection-start-column="15" selection-end-line="78" selection-end-column="15" />
           <folding>
-            <element signature="e#0#12#0" expanded="true" />
+            <element signature="e#0#48#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/RNN/rnn_keras.py">
+    <entry file="file://$PROJECT_DIR$/lib/RNN/create_word_vector.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="277">
-          <caret line="66" column="43" selection-start-line="66" selection-start-column="43" selection-end-line="66" selection-end-column="43" />
+        <state relative-caret-position="209">
+          <caret line="212" column="36" selection-start-line="212" selection-start-column="36" selection-end-line="212" selection-end-column="36" />
           <folding>
-            <element signature="e#0#48#0" expanded="true" />
+            <element signature="e#0#12#0" expanded="true" />
           </folding>
         </state>
       </provider>
