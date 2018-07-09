@@ -349,7 +349,7 @@ def do_create(articles, articles_test):
 
 def create_word_vecs(articles, articles_test):
     data_path = 'C:/Programmierung/Masterarbeit/Scraper/data/obj/'
-    if os.path.isfile('data/obj/articles.pkl'):
+    if os.path.isfile('data/obj/X_train.pkl'):
         X_train = load_obj('X_train')
         X_test = load_obj('X_test')
         y_train = load_obj('y_train')

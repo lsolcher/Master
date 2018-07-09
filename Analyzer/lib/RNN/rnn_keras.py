@@ -2,7 +2,7 @@ from .create_word_vector import create_word_vecs
 import numpy as np
 import matplotlib.pyplot as plt
 from keras.models import Sequential, Model
-from keras.layers import Dense, Dropout, Input, LSTM, Bidirectional, Flatten
+from keras.layers import Dense, Dropout, Input, LSTM, Embedding, Bidirectional, Flatten
 from keras.layers import Conv1D, MaxPooling1D, GlobalMaxPooling1D
 from keras.optimizers import SGD
 import seaborn as sns
@@ -64,7 +64,7 @@ def run(articles, articles_test):
     if model.name == "CNN" or model.name == "LSTM":
         X_train = np.expand_dims(X_train, axis=2)
         X_test = np.expand_dims(X_test, axis=2)
-        print('Text train shape: ', X_test.shape)
+        print('Text train shape: ', X_train.shape)
         print('Text test shape: ', X_test.shape)
 
     model.summary()
