@@ -27,10 +27,10 @@ logger = log.setup_custom_logger('root')
 logger.info('start analyzing')
 
 TESTPATH = 'C:/Programmierung/Masterarbeit/Scraper/data/articles/TEST/'
-tokens = Tokenizer.tokenize(TESTPATH)
+tokens = Tokenizer.tokenize_from_dir_to_tokens_per_document(TESTPATH)
 tokens = Tagger.tag(tokens)
 tokens = Normalizer.normalize(tokens)
-tokens = Lemmatizer.lemmatize(tokens)
+tokens = Lemmatizer.lemmatize_tokens(tokens)
 
 word_list = []
 for token in tokens:

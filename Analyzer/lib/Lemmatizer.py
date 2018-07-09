@@ -1,7 +1,7 @@
 from germalemma import GermaLemma
 
 
-def lemmatize(tokens):
+def lemmatize_tokens(tokens):
     lemmatizer = GermaLemma()
     new_tokens = {}
     for doc_label, tok_pos in tokens.items():
@@ -15,3 +15,4 @@ def lemmatize(tokens):
             new_tokens[doc_label] = lemmata_pos
 
     return new_tokens
+

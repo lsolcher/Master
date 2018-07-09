@@ -1,0 +1,3 @@
+model_checkpoint_path: "C:\\Programmierung\\Masterarbeit\\Analyzer\\runs\\1530567010\\checkpoints\\model-200"
+all_model_checkpoint_paths: "C:\\Programmierung\\Masterarbeit\\Analyzer\\runs\\1530567010\\checkpoints\\model-100"
+all_model_checkpoint_paths: "C:\\Programmierung\\Masterarbeit\\Analyzer\\runs\\1530567010\\checkpoints\\model-200"

@@ -7,34 +7,36 @@ Created on Fri Jun  8 18:13:28 2018
 
 import log
 import os.path
-import rnn
-from collections import Counter
 import math
 import operator
 import time
 import re
 import csv
 import preprocessor
+import numpy as np
+from lib.RNN import rnn_keras
+from lib.RNN import rnn_tensorflow
+import pickle
 
+def load_obj(name):
+    with open('data/obj/' + name + '.pkl', 'rb') as f:
+        return pickle.load(f)
+
+def load_dirs(main_path):
+    directory_list = list()
+    dirs = [os.path.join(main_path, d) for d in os.listdir(main_path) if os.path.isdir(os.path.join(main_path, d))]
+    for train_dir in dirs:
+        directory_list.append(train_dir)
+    return directory_list
 
 def bow(main_path):
     directory_list = list()
-    for root, dirs, files in os.walk(main_path, topdown=False):
-        for name in dirs:
-            directory_list.append(os.path.join(root, name))
-    preprocessed_tokens = preprocessor.preprocess_tokens(directory_list)
+    dirs = [os.path.join(main_path, d) for d in os.listdir(main_path) if os.path.isdir(os.path.join(main_path, d))]
+    for train_dir in dirs:
+        directory_list.append(train_dir)
+    counts, word_list = preprocessor.preprocess_tokens_per_document(directory_list)
 
     #BOW
-    start = time.time()
-    word_list = {}
-    for idx, token in preprocessed_tokens.items():
-        word_list[idx] = ([t[0] for t in token])
-    counts = {}
-    print('counting...')
-    for idx, item in word_list.items():
-        counts[idx] = Counter(item)
-    end = time.time()
-    print('done! took ', end - start, ' seconds.')
     start = time.time()
     vocab = []
     for l in word_list:
@@ -71,6 +73,8 @@ def bow(main_path):
         w.writerows(sorted_sims)
 
 
+
+
 def counter_cosine_similarity(c1, c2):
     terms = set(c1).union(c2)
     dotprod = sum(c1.get(k, 0) * c2.get(k, 0) for k in terms)
@@ -79,14 +83,84 @@ def counter_cosine_similarity(c1, c2):
     return dotprod / (magA * magB)
 
 
+def prepare_data(main_path, per_source, test_string):
+    if per_source is False:
+        if os.path.isfile('data/obj/counts'+test_string+'.pkl'):
+            counts = load_obj('counts'+test_string)
+            word_list = load_obj('word_list'+test_string)
+            tokens = load_obj('tokens'+test_string)
+        else:
+            counts, word_list, tokens = preprocessor.preprocess_tokens_per_document(main_path, test_string)
+    else:
+        if os.path.isfile('data/obj/counts_source'+test_string+'.pkl'):
+            counts = load_obj('counts_source'+test_string)
+            word_list = load_obj('word_list_source'+test_string)
+            tokens = load_obj('tokens_source'+test_string)
+
+        else:
+            counts, word_list, tokens = preprocessor.preprocess_tokens_per_source(main_path, test_string)
+
+
+    return counts, word_list, tokens
+
+
+def load_model_parameters_theano(path, model):
+    npzfile = np.load(path)
+    U, V, W = npzfile["U"], npzfile["V"], npzfile["W"]
+    model.hidden_dim = U.shape[0]
+    model.word_dim = U.shape[1]
+    model.U.set_value(U)
+    model.V.set_value(V)
+    model.W.set_value(W)
+    print("Loaded model parameters from %s. hidden_dim=%d word_dim=%d" % (path, U.shape[0], U.shape[1]))
+
+
 def main():
     # logger
+    per_source = True
     datapath = os.path.abspath(os.path.dirname(__file__)) + '\\data\\'
     logger = log.setup_custom_logger('root')
     logger.info('start analyzing')
     main_path = 'C:/Programmierung/Masterarbeit/Scraper/data/articles/'
-    #rnn.rnn(main_path)
-    bow(main_path)
+    test_path = 'C:/Programmierung/Masterarbeit/Scraper/data/test'
+    valid_path = 'C:/Programmierung/Masterarbeit/Scraper/data/valid'
+    model_path = 'C:/Programmierung/Masterarbeit/Analyzer/data/trainedModels'
+
+    #dirs_to_train = load_dirs(main_path)
+
+    counts, word_list, tokens = prepare_data(main_path, per_source, '')
+    counts_test, word_list_test, tokens_test = prepare_data(test_path, per_source, '_test')
+    counts_valid, word_list_valid, tokens_valid = prepare_data(valid_path, per_source, '_valid')
+    if os.path.isfile('data/obj/articles.pkl'):
+        articles = load_obj('articles')
+    else:
+        articles = preprocessor.get_articles_from_top_dir(main_path, '')
+    if os.path.isfile('data/obj/articles_test.pkl'):
+        articles_test = load_obj('articles_test')
+    else:
+        articles_test = preprocessor.get_articles_from_top_dir(test_path, '_test')
+
+
+    # cnn_model.train()
+    # rnn_tensorflow.run(articles, articles_test)
+    rnn_keras.run(articles, articles_test)
+
+
+
+    # rnn_lstm_2.load_data(model_path, counts, word_list, tokens, articles, counts_test, word_list_test, tokens_test, counts_valid, word_list_valid, tokens_valid)
+    # word2vec.train(counts, word_list, tokens, articles)
+    # counts, word_list, tokens = preprocessor.preprocess_tokens_per_document(main_path)
+
+    # rnn_lstm.prepare_data(counts, word_list, tokens, articles)
+    # rnn_udemy.prepare_data(counts, word_list, tokens, articles)
+    #bow(main_path)
+    #rnn_word_model.load_data(main_path)
+    #rnn_char_model.main(main_path)
+    #bow(main_path)
+    #rnn.train_rnn(main_path)
+    #model = RNNTheano(8000, hidden_dim=100)
+    #load_model_parameters_theano("C:\\Programmierung\\Masterarbeit\\Analyzer\\data\\trainedModels\\rnn-theano-80-8000-2018-06-19-07-10-30.npz", model)
+    #rnn.rnn(main_path, model)
 
 
 if __name__ == "__main__":

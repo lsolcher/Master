@@ -21,7 +21,7 @@ tf.flags.DEFINE_string("SPON_data_test", "C:/Programmierung/Masterarbeit/Scraper
 
 # Eval Parameters
 tf.flags.DEFINE_integer("batch_size", 64, "Batch Size (default: 64)")
-tf.flags.DEFINE_string("checkpoint_dir", "C:\\Programmierung\\Masterarbeit\\Analyzer\\runs\\1530558977\\checkpoints\\", "Checkpoint directory from training run")
+tf.flags.DEFINE_string("checkpoint_dir", "C:\\Programmierung\\Masterarbeit\\Analyzer\\runs\\1530567010\\checkpoints\\", "Checkpoint directory from training run")
 tf.flags.DEFINE_boolean("eval_train", True, "Evaluate on all training data")
 
 # Misc Parameters
@@ -37,7 +37,7 @@ def main():
 
     # CHANGE THIS: Load data. Load your own data here
     if FLAGS.eval_train:
-        x_raw, y_test = utils.load_data(FLAGS.JF_data_test, FLAGS.Zeit_data_test, FLAGS.SPON_data_test)
+        x_raw, y_test, x_labels = utils.load_data(FLAGS.JF_data_test, FLAGS.Zeit_data_test, FLAGS.SPON_data_test)
         y_test = np.argmax(y_test, axis=1)
     else:
         x_raw = ["It is truly a breakthough in fashion"]
@@ -89,7 +89,7 @@ def main():
         print("Accuracy: {:g}".format(correct_predictions/float(len(y_test))))
 
     # Save the evaluation to a csv
-    predictions_human_readable = np.column_stack((np.array(x_raw), all_predictions))
+    predictions_human_readable = np.column_stack((np.array(x_labels), all_predictions))
     out_path = os.path.join(FLAGS.checkpoint_dir, "..", "prediction.csv")
     print("Saving evaluation to {0}".format(out_path))
     with open(out_path, 'w', encoding='utf-8') as f:

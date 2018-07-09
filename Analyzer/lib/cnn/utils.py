@@ -30,6 +30,7 @@ def clean_str(string):
     """
 
 
+
 def load_data(jf_datapath, zeit_datapath, spon_datapath):
     """
     Loads guardian data from files, splits the data into words and generates labels.
@@ -39,6 +40,14 @@ def load_data(jf_datapath, zeit_datapath, spon_datapath):
     jf_text = get_sentences_from_sub_dir(jf_datapath)
     zeit_text = get_sentences_from_sub_dir(zeit_datapath)
     spon_text = get_sentences_from_sub_dir(spon_datapath)
+
+    x_labels = []
+    for key in jf_text.keys():
+        x_labels.append(key)
+    for key in zeit_text.keys():
+        x_labels.append(key)
+    for key in spon_text.keys():
+        x_labels.append(key)
 
     # dict to list
     jf_text = utils.dict_to_list(jf_text)
@@ -58,6 +67,7 @@ def load_data(jf_datapath, zeit_datapath, spon_datapath):
     x_text = jf_string + zeit_string + spon_string
     x_text = [Tokenizer.tokenize_sentences(sent) for sent in x_text]
     x_strings = []
+
     for li in x_text:
         stri = ' '.join(li)
         x_strings.append(stri)
@@ -69,7 +79,7 @@ def load_data(jf_datapath, zeit_datapath, spon_datapath):
     spon_labels = [[0, 0, 1] for _ in spon_string]
 
     y = np.concatenate([jf_labels, zeit_labels, spon_labels], 0)
-    return [x_strings, y]
+    return [x_strings, y, x_labels]
 
 def batch_iter(data, batch_size, num_epochs, shuffle=True):
     """

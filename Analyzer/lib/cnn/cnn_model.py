@@ -42,7 +42,7 @@ tf.flags.DEFINE_boolean("log_device_placement", False, "Log placement of ops on 
 
 
 def load_data():
-    x_data, y_labels = utils.load_data(FLAGS.JF_data_path, FLAGS.Zeit_data_path, FLAGS.SPON_data_path)
+    x_data, y_labels, x_labels = utils.load_data(FLAGS.JF_data_path, FLAGS.Zeit_data_path, FLAGS.SPON_data_path)
 
     # Build vocabulary
     max_document_length = max([len(x.split(" ")) for x in x_data])
