@@ -90,6 +90,7 @@ def create_average_vec(doc, wordvec_model):
     num_words = 0.
     for word in doc.split():
         if word in wordvec_model.wv.vocab:
+            obj = wordvec_model[word]
             average = np.add(average, wordvec_model[word])
             num_words += 1.
     if num_words != 0.:
@@ -228,7 +229,7 @@ def do_create(articles, articles_test):
     print('y_train_ohe samples:')
     print(y_train_ohe[:5])
 
-    X_train, X_test, y_train, y_test = train_test_split(train_cleaned_vec, y_train_ohe, test_size=0.2, random_state=21)
+    X_train, X_test, y_train, y_test = train_test_split(train_cleaned_vec, y_train_ohe, test_size=0.2)
     print('X_train size: {}'.format(X_train.shape))
     print('X_test size: {}'.format(X_test.shape))
     print('y_train size: {}'.format(y_train.shape))

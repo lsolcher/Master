@@ -58,7 +58,7 @@ def run(articles, articles_test):
     print('y_train size: {}'.format(y_train.shape))
     print('y_test size: {}'.format(y_test.shape))
 
-    model = build_model('lstm')
+    model = build_model('mlp')
 
 
     if model.name == "CNN" or model.name == "LSTM":
@@ -74,7 +74,7 @@ def run(articles, articles_test):
     model.compile(optimizer=sgd, loss='categorical_crossentropy', metrics=['acc'])
 
     # Define number of epochs
-    epochs = 50
+    epochs = 30
 
     # Fit the model to the training data
     estimator = model.fit(X_train, y_train,
