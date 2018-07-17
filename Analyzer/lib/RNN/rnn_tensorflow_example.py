@@ -60,17 +60,43 @@ def run(articles, articles_test):
     for attr, value in sorted(FLAGS.__flags.items()):
         print("{} = {}".format(attr.upper(), value))
     print("")
-    X_train, X_test, y_train, y_test, word2vec_model = create_word_vecs(articles, articles_test)
-    #X_train = np.expand_dims(X_train, axis=2)
-    #X_test = np.expand_dims(X_test, axis=2)
-    print('Text train shape: ', X_test.shape)
-    print('Text test shape: ', X_test.shape)
+    x_train, x_dev, y_train, y_dev, word2vec_model = create_word_vecs(articles, articles_test)
+    #x_text = articles
+    #y = np.zeros(shape=(len(articles), 3))
+    count = 0
+    """
+    for key, item in articles.items():
+        if 'JF' in key:
+            y[count] = [1, 0 , 0]
+        elif 'SPON' in key:
+            y[count] = [0, 1, 0]
+        elif 'ZEIT' in key:
+            y[count] = [0, 0, 1]
+        count += 1
+    """
+    #y = np.array(y)
 
-    #X_train = np.expand_dims(X_train, axis=1)
-    #X_test = np.expand_dims(X_test, axis=1)
-    print('Text train shape: ', X_test.shape)
-    print('Text test shape: ', X_test.shape)
-    #text_vocab_processor = tf.contrib.learn.preprocessing.VocabularyProcessor(7985)
+    #text_vocab_processor = tf.contrib.learn.preprocessing.VocabularyProcessor(FLAGS.max_sentence_length)
+    #x = np.array(list(text_vocab_processor.fit_transform(X_train)))
+    #print("Text Vocabulary Size: {:d}".format(len(text_vocab_processor.vocabulary_)))
+
+    #print("x = {0}".format(x.shape))
+    #print("y = {0}".format(y.shape))
+    print("")
+
+    # Randomly shuffle data
+    np.random.seed(10)
+    #shuffle_indices = np.random.permutation(np.arange(len(y)))
+    #x_shuffled = x[shuffle_indices]
+    #y_shuffled = y[shuffle_indices]
+
+    # Split train/test set
+    # TODO: This is very crude, should use cross-validation
+    #dev_sample_index = -1 * int(FLAGS.dev_sample_percentage * float(len(y)))
+    #x_train, x_dev = x_shuffled[:dev_sample_index], x_shuffled[dev_sample_index:]
+    #y_train, y_dev = y_shuffled[:dev_sample_index], y_shuffled[dev_sample_index:]
+    print("Train/Dev split: {:d}/{:d}\n".format(len(y_train), len(y_dev)))
+
 
     tf.reset_default_graph() # prevent bugs
     g = tf.Graph()
@@ -78,7 +104,7 @@ def run(articles, articles_test):
         sess = tf.Session()
         with sess.as_default():
             rnn =  RNN(
-                sequence_length=X_train.shape[1],
+                sequence_length=x_train.shape[1],
                 num_classes=y_train.shape[1],
                 vocab_size=7985,
                 embedding_size=300,
@@ -150,7 +176,7 @@ def run(articles, articles_test):
 
             # Generate batches
             batches = batch_iter(
-                list(zip(X_train, y_train)), FLAGS.batch_size, FLAGS.num_epochs)
+                list(zip(x_train, y_train)), FLAGS.batch_size, FLAGS.num_epochs)
             # Training loop. For each batch...
             for batch in batches:
                 x_batch, y_batch = zip(*batch)
@@ -173,8 +199,8 @@ def run(articles, articles_test):
                 if step % FLAGS.evaluate_every == 0:
                     print("\nEvaluation:")
                     feed_dict_dev = {
-                        rnn.input_text: X_test,
-                        rnn.input_y: y_test,
+                        rnn.input_text: x_dev,
+                        rnn.input_y: y_dev,
                         rnn.dropout_keep_prob: 1.0
                     }
                     summaries_dev, loss, accuracy = sess.run(
