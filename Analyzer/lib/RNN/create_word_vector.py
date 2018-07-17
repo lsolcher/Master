@@ -235,7 +235,7 @@ def do_create(articles, articles_test):
     print('y_train size: {}'.format(y_train.shape))
     print('y_test size: {}'.format(y_test.shape))
 
-    return X_train, X_test, y_train, y_test
+    return X_train, X_test, y_train, y_test, wordvec_model
 
     """
     # punctuations = string.punctuation
@@ -356,12 +356,17 @@ def create_word_vecs(articles, articles_test):
         y_train = load_obj('y_train')
         y_test = load_obj('y_test')
     else:
-        X_train, X_test, y_train, y_test = do_create(articles, articles_test)
+        X_train, X_test, y_train, y_test, word2vec_model = do_create(articles, articles_test)
         save_obj(X_train, 'X_train')
         save_obj(X_test, 'X_test')
         save_obj(y_train, 'y_train')
         save_obj(y_test, 'y_test')
-    return X_train, X_test, y_train, y_test
+    if os.path.isfile('data/obj/word2vec_model.pkl'):
+        word2vec_model = load_obj('word2vec_model')
+    else:
+        X_train, X_test, y_train, y_test, word2vec_model = do_create(articles, articles_test)
+        save_obj(y_test, 'y_test')
+    return X_train, X_test, y_train, y_test, word2vec_model
 
 
 

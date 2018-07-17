@@ -142,8 +142,8 @@ def main():
 
 
     # cnn_model.train()
-    # rnn_tensorflow.run(articles, articles_test)
-    rnn_keras.run(articles, articles_test)
+    rnn_tensorflow.run(articles, articles_test)
+    #rnn_keras.run(articles, articles_test)
 
 
 
